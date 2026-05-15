@@ -134,7 +134,7 @@ watch(
 </script>
 
 <style scoped>
-.view { max-width: 1600px; }
+.view { max-width: 1600px; height: 100%; overflow-y: auto; }
 .block { padding: 16px 20px; }
 .desc { color: var(--text-muted); font-size: 13px; margin: 0 0 16px; }
 .desc.warn { color: var(--risk-red); }

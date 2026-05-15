@@ -150,7 +150,7 @@ function pickCountry(a) { countryId.value = a.country; step.value = 1 }
 </script>
 
 <style scoped>
-.view { max-width: 1600px; }
+.view { max-width: 1600px; height: 100%; overflow-y: auto; }
 .block { padding: 16px 20px; }
 .desc { color: var(--text-muted); font-size: 13px; margin: 0 0 16px; }
 .kpi-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }

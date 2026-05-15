@@ -103,6 +103,7 @@
       </div>
     </section>
 
+    <div class="invest-scroll-area">
     <section class="invest-main-grid" :class="{ collapsed: panelCollapsed }">
       <section class="glass-panel list-panel">
         <div class="panel-head compact">
@@ -287,7 +288,7 @@
           </div>
           <KnowledgeGraph
             :graph-data="selectedGraph"
-            :height="panelCollapsed ? 0 : 360"
+            :height="panelCollapsed ? 0 : 260"
             :highlight-nodes="highlightedGraph.nodes"
             :highlight-edges="highlightedGraph.edges"
             @select="handleGraphSelect"
@@ -360,6 +361,7 @@
         </div>
       </div>
     </section>
+    </div>
 
     <transition name="toast-fade">
       <div v-if="toastVisible" class="risk-toast">
@@ -1306,10 +1308,21 @@ onBeforeUnmount(() => {
 .investment-screen {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  min-height: calc(100vh - 108px);
+  gap: 8px;
+  padding: 8px 14px 6px;
+  height: 100%;
+  overflow: hidden;
   color: #e8fbff;
   font-family: "Source Han Sans SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}
+
+.invest-scroll-area {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .glass-panel {
@@ -1336,30 +1349,31 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 18px;
-  padding: 16px 18px;
+  gap: 14px;
+  padding: 10px 16px;
+  flex-shrink: 0;
 }
 
 .screen-kicker {
-  font-size: 12px;
-  letter-spacing: 0.2em;
+  font-size: 10px;
+  letter-spacing: 0.15em;
   color: #7ad8ff;
   text-transform: uppercase;
 }
 
 .screen-title {
-  margin: 6px 0 8px;
-  font-size: 30px;
+  margin: 2px 0 4px;
+  font-size: 18px;
   font-weight: 800;
-  text-shadow: 0 0 14px rgba(14, 165, 233, 0.42), 0 0 22px rgba(6, 182, 212, 0.18);
+  text-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
 }
 
 .screen-desc {
   margin: 0;
   max-width: 860px;
-  line-height: 1.7;
+  line-height: 1.35;
   color: #9ec6d8;
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .topbar-right {
@@ -1440,11 +1454,11 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .kpi-card {
-  padding: 14px 16px;
-  min-height: 128px;
+  padding: 8px 12px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -1550,11 +1564,19 @@ onBeforeUnmount(() => {
   margin-top: 8px;
 }
 
-.portfolio-panel,
+.portfolio-panel {
+  padding: 10px 16px;
+  flex-shrink: 0;
+}
+
 .bottom-panel,
-.list-panel,
+.list-panel {
+  padding: 14px 16px;
+}
+
 .detail-panel {
   padding: 14px 16px;
+  overflow-y: auto;
 }
 
 .panel-head {
@@ -1647,7 +1669,7 @@ onBeforeUnmount(() => {
 }
 
 .portfolio-chart {
-  height: 300px;
+  height: 170px;
 }
 
 .invest-main-grid {
@@ -1663,6 +1685,9 @@ onBeforeUnmount(() => {
 
 .list-panel {
   min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .filter-bar {
@@ -1982,7 +2007,7 @@ onBeforeUnmount(() => {
 }
 
 .bottom-chart {
-  height: 310px;
+  height: 200px;
 }
 
 .bottom-info-bar {
@@ -2125,7 +2150,7 @@ onBeforeUnmount(() => {
 
   .portfolio-chart,
   .bottom-chart {
-    height: 260px;
+    height: 180px;
   }
 }
 </style>

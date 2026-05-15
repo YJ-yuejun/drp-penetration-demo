@@ -183,7 +183,7 @@ const timeline = [
 </script>
 
 <style scoped>
-.comp-view { max-width: 1400px; display: flex; flex-direction: column; gap: 14px; }
+.comp-view { max-width: 1400px; display: flex; flex-direction: column; gap: 14px; height: 100%; overflow-y: auto; padding: 12px 16px; }
 
 .hero {
   padding: 32px 24px;

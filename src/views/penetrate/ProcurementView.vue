@@ -1108,11 +1108,12 @@ function statusColor(status) {
 <style scoped>
 .procurement-screen {
   position: relative;
-  min-height: 100%;
-  padding: 20px 20px 28px;
+  height: 100%;
+  padding: 8px 14px 6px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
+  overflow: hidden;
   color: #edf5ff;
   background:
     radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 26%),
@@ -1143,12 +1144,13 @@ function statusColor(status) {
 }
 
 .procurement-topbar {
-  border-radius: 22px;
-  padding: 22px 24px;
+  border-radius: 18px;
+  padding: 10px 18px;
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: 16px;
   align-items: flex-start;
+  flex-shrink: 0;
 }
 
 .screen-kicker,
@@ -1156,15 +1158,15 @@ function statusColor(status) {
 .meta-label,
 .reason-title,
 .graph-note {
-  font-size: 12px;
-  letter-spacing: 0.14em;
+  font-size: 10px;
+  letter-spacing: 0.12em;
   color: #7cc9ff;
   text-transform: uppercase;
 }
 
 .screen-title {
-  margin: 8px 0 10px;
-  font-size: 28px;
+  margin: 2px 0 4px;
+  font-size: 18px;
   line-height: 1.24;
 }
 
@@ -1172,8 +1174,9 @@ function statusColor(status) {
 .panel-sub,
 .graph-note {
   margin: 0;
+  font-size: 11px;
   color: rgba(217, 232, 255, 0.78);
-  line-height: 1.7;
+  line-height: 1.4;
 }
 
 .topbar-meta {
@@ -1205,13 +1208,13 @@ function statusColor(status) {
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 14px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .kpi-card {
-  border-radius: 18px;
-  padding: 16px 16px 12px;
-  min-height: 144px;
+  border-radius: 16px;
+  padding: 8px 12px;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -1302,14 +1305,14 @@ function statusColor(status) {
 .visual-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .chart-panel,
-.table-panel,
-.bottom-panel,
 .drawer {
-  border-radius: 20px;
+  border-radius: 16px;
+  padding: 10px 14px;
 }
 
 .chart-panel {
@@ -1375,13 +1378,21 @@ function statusColor(status) {
 }
 
 .visual-chart {
-  height: 360px;
-  margin-top: 14px;
+  height: 200px;
+  margin-top: 6px;
 }
 
-.table-panel,
 .bottom-panel {
-  padding: 16px 18px 18px;
+  padding: 10px 14px;
+}
+
+.table-panel {
+  padding: 10px 14px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .table-summary {

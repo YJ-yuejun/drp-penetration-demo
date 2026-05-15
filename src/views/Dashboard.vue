@@ -1,7 +1,7 @@
 <template>
-  <div class="dbrd" :class="{ 'cockpit-compact': viewMode === 'cockpit' && !drillMode }">
+  <div class="dbrd" :class="{ 'cockpit-compact': !drillMode }">
     <!-- ==================== 驾驶舱模式 ==================== -->
-    <template v-if="viewMode === 'cockpit' && !drillMode">
+    <template v-if="!drillMode">
       <!-- 预警 Toast -->
       <div v-if="toastShow" class="toast-bar risk-pulse" @click="onClickToast" style="cursor:pointer" title="点击跳转到对应穿透模块">
         <span class="toast-dot"></span>
@@ -44,7 +44,7 @@
             <div class="contract-perf-list">
               <div v-for="ct in topContracts" :key="ct.id" class="cp-item">
                 <div class="cp-header">
-                  <span class="cp-name">{{ ct.name.length > 10 ? ct.name.slice(0, 10) + '...' : ct.name }}</span>
+                  <span class="cp-name">{{ ct.name }}</span>
                   <RiskBadge :level="ct.level" />
                 </div>
                 <div class="cp-bar-wrap">
@@ -100,7 +100,7 @@
                   <tr v-for="r in dashboardRiskSamples" :key="r.id" @click="goScene(r)" class="ct-row">
                     <td class="ct-mono">{{ r.id }}</td>
                     <td>{{ r.type }}</td>
-                    <td class="ct-desc">{{ r.summary.length > 22 ? r.summary.slice(0, 22) + '...' : r.summary }}</td>
+                    <td class="ct-desc">{{ r.summary }}</td>
                     <td><RiskBadge :level="r.level" /></td>
                     <td><span class="ct-status" :class="'sts-' + r.level">{{ r.level === 'critical' ? '处置中' : r.level === 'high' ? '监控中' : '已记录' }}</span></td>
                   </tr>
@@ -192,7 +192,7 @@
     </template>
 
     <!-- ==================== 穿透面板 ==================== -->
-    <template v-if="drillMode && viewMode === 'cockpit'">
+    <template v-if="drillMode">
       <div class="drill-overlay">
         <div class="drill-header-row">
           <button class="btn" @click="exitDrill">← 返回驾驶舱</button>
@@ -1183,155 +1183,14 @@
       </div>
     </template>
 
-    <!-- ==================== 其他视图模式 ==================== -->
-    <!-- AI 智能中台 -->
-    <template v-if="viewMode === 'ai' && !drillMode">
-      <div class="alt-view">
-        <div class="alt-header">
-          <div class="alt-tabs">
-            <button v-for="t in aiTabs" :key="t" class="alt-tab" :class="{ 'alt-tab-sel': aiActiveTab === t }" @click="aiActiveTab = t">{{ t }}</button>
-          </div>
-        </div>
-        <div class="alt-body">
-          <!-- 智能问数 -->
-          <div v-if="aiActiveTab === '智能问数'" class="ai-qa-full">
-            <div class="ai-presets-row">
-              <button v-for="q in aiPresets" :key="q" class="ai-preset-btn lg" @click="askAI(q)" :disabled="aiStreaming">{{ q }}</button>
-            </div>
-            <div v-if="aiThinking.length" class="ai-thinking-lg">
-              <div v-for="(step, i) in aiThinking" :key="i" class="ai-think-line"><span class="ai-think-dot"></span>{{ step }}</div>
-            </div>
-            <div v-if="aiAnswer" class="ai-answer-lg">{{ aiAnswer }}</div>
-            <div v-if="aiChart" style="height:300px;margin-top:12px">
-              <EChart class="p-chart" :option="aiChartOption" />
-            </div>
-          </div>
-          <!-- 主动预警 -->
-          <div v-if="aiActiveTab === '主动预警'" class="ai-alerts-full">
-            <div v-for="a in proactiveAlerts" :key="a.id" class="alert-card" :class="'ac-' + a.level">
-              <div class="ac-head">
-                <span class="ac-dot" :class="'aa-' + a.level"></span>
-                <strong>{{ a.title }}</strong>
-                <span class="ac-time">{{ a.time }}</span>
-              </div>
-              <p class="ac-detail">{{ a.detail }}</p>
-              <div class="ac-actions">
-                <button v-for="act in a.actions" :key="act" class="btn sm">{{ act }}</button>
-              </div>
-            </div>
-          </div>
-          <!-- 关联分析 -->
-          <div v-if="aiActiveTab === '关联分析'">
-            <div class="input-row">
-              <input v-model="graphQuery" class="graph-input" placeholder="输入主体名称，如：某设备贸易商行" @keyup.enter="searchGraph" />
-              <button class="btn btn-primary" @click="searchGraph">关联分析</button>
-            </div>
-            <KnowledgeGraph v-if="graphData" :graphData="graphData" :height="380" style="margin-top:12px" />
-            <div v-else class="empty-hint">输入主体名称，查看关联关系图谱</div>
-          </div>
-          <!-- 报告生成 -->
-          <div v-if="aiActiveTab === '报告生成'">
-            <button class="btn btn-primary lg-btn" @click="generateReport" :disabled="reportGenerating">{{ reportGenerating ? '生成中...' : '生成本月风险分析报告' }}</button>
-            <div v-if="reportContent" class="report-output">
-              <div v-for="(line, i) in reportContent" :key="i" class="report-line">{{ line }}</div>
-            </div>
-          </div>
-          <!-- 决策建议 -->
-          <div v-if="aiActiveTab === '决策建议'" class="decision-list">
-            <div v-for="(d, i) in decisions" :key="i" class="decision-card">
-              <div class="dc-no">{{ i + 1 }}</div>
-              <div class="dc-body">
-                <div class="dc-title">{{ d.title }}</div>
-                <div class="dc-desc">{{ d.desc }}</div>
-                <div class="dc-meta"><RiskBadge :level="d.level" /> · {{ d.dept }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </template>
-
-    <!-- 风险预警中心 -->
-    <template v-if="viewMode === 'risk' && !drillMode">
-      <div class="alt-view">
-        <div class="alt-header"><h3>风险预警中心</h3></div>
-        <div class="alt-body">
-          <div class="risk-center-grid">
-            <div class="compact-table-wrap">
-              <table class="compact-table">
-                <thead><tr><th>编号</th><th>类型</th><th>等级</th><th>板块/单位</th><th>摘要</th><th>状态</th></tr></thead>
-                <tbody>
-                  <tr v-for="r in RISK_SAMPLES" :key="r.id">
-                    <td>{{ r.id }}</td><td>{{ r.type }}</td><td><RiskBadge :level="r.level" /></td>
-                    <td>{{ r.sector }} · {{ r.company }}</td><td>{{ r.summary }}</td>
-                    <td><span class="ct-status" :class="'sts-' + r.level">{{ r.level === 'critical' ? '处置中' : r.level === 'high' ? '监控中' : '已记录' }}</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </template>
-
-    <!-- 闭环处置 -->
-    <template v-if="viewMode === 'rectification' && !drillMode">
-      <div class="alt-view">
-        <div class="alt-header"><h3>整改销号流程</h3></div>
-        <div class="alt-body">
-          <div class="rect-flow">
-            <div v-for="(s, i) in RECTIFICATION_FLOW" :key="s.step" class="rf-step" :class="{ 'rf-done': s.done, 'rf-current': !s.done && (i === 0 || RECTIFICATION_FLOW[i - 1].done) }">
-              <div class="rf-num">{{ s.step }}</div>
-              <div class="rf-info">
-                <div class="rf-name">{{ s.name }}</div>
-                <div class="rf-desc">{{ s.desc }}</div>
-              </div>
-              <span v-if="s.done" class="rf-check">✅</span>
-              <span v-else-if="i === 0 || RECTIFICATION_FLOW[i - 1].done" class="rf-spin">⏳</span>
-            </div>
-          </div>
-          <div class="compact-table-wrap" style="margin-top:16px">
-            <table class="compact-table">
-              <thead><tr><th>工单编号</th><th>风险ID</th><th>标题</th><th>状态</th><th>负责人</th><th>截止日</th></tr></thead>
-              <tbody>
-                <tr v-for="w in WORK_ORDERS" :key="w.id">
-                  <td>{{ w.id }}</td><td>{{ w.riskId }}</td><td>{{ w.title }}</td><td>{{ w.status }}</td><td>{{ w.owner }}</td><td>{{ w.due }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </template>
-
-    <!-- 价值对比 -->
-    <template v-if="viewMode === 'comparison' && !drillMode">
-      <div class="alt-view">
-        <div class="alt-header"><h3>价值对比 · 无 DRP vs 有 DRP</h3></div>
-        <div class="alt-body">
-          <div class="compare-grid">
-            <div v-for="c in comparisons" :key="c.label" class="cmp-card">
-              <div class="cmp-label">{{ c.label }}</div>
-              <div class="cmp-values">
-                <div class="cmp-val old">{{ c.old }}</div>
-                <div class="cmp-arrow">→</div>
-                <div class="cmp-val new">{{ c.new }}</div>
-              </div>
-              <div class="cmp-save">{{ c.saving }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </template>
-
     <!-- ==================== FOOTER ==================== -->
     <footer class="dbrd-footer">
       <button
         v-for="t in footerTabs"
-        :key="t"
+        :key="t.routeName"
         class="ft-tab"
-        :class="{ 'ft-sel': viewMode === t.mode }"
-        @click="switchView(t.mode)"
+        :class="{ 'ft-sel': $route.name === t.routeName }"
+        @click="router.push({ name: t.routeName })"
       >{{ t.label }}</button>
     </footer>
 
@@ -1504,7 +1363,6 @@ const router = useRouter()
 import { matchQA, QA_PRESETS, AI_PROACTIVE_ALERTS, GRAPH_SUPPLIER_DATA } from '@/mock/qa.js'
 
 // ==================== 核心状态 ====================
-const viewMode = ref('cockpit')
 const drillMode = ref(null)
 const drillNode = ref(null)
 const drillPath = ref([])
@@ -1519,7 +1377,7 @@ const toastQueue = [
   { text: '采购穿透：CG-2026-0501 围标概率 0.94', module: 'procurement' },
   { text: '装备制造板块管理费用同比 +34%', module: 'finance' },
   { text: '海外工程总承包公司境外回款延迟 >45天', module: 'overseas' },
-  { text: '合同 CT-2026-0312 高风险条款已 NLP 标红', module: 'contract' },
+  { text: '合同 CT-2026-0312 预付100%+无质保金 AI 已标红', module: 'contract' },
   { text: '数字科技公司隐性薪酬类支付频次上升', module: 'salary' },
   { text: '华东电力 SPV 多层嵌套待穿透核查', module: 'property' },
   { text: '某地产集团债券主体评级下调', module: 'banking' },
@@ -1552,18 +1410,12 @@ const contractAnimatedValues = reactive(Object.fromEntries(CONTRACT_COMMAND_CENT
 
 // ==================== Footer Tabs ====================
 const footerTabs = [
-  { label: '驾驶舱总览', mode: 'cockpit' },
-  { label: '智能中台', mode: 'ai' },
-  { label: '风险预警', mode: 'risk' },
-  { label: '闭环处置', mode: 'rectification' },
-  { label: '价值对比', mode: 'comparison' },
+  { label: '驾驶舱总览', routeName: 'dashboard' },
+  { label: '智能中台', routeName: 'smart' },
+  { label: '风险预警', routeName: 'risk-center' },
+  { label: '闭环处置', routeName: 'rectification' },
+  { label: '价值对比', routeName: 'comparison' },
 ]
-
-function switchView(mode) {
-  viewMode.value = mode
-  drillMode.value = null
-  drillNode.value = null
-}
 
 // ==================== 四模块看板图表 ====================
 const boardInvestChart = computed(() => ({
@@ -1846,20 +1698,6 @@ const heatmapOption = computed(() => ({
   }],
 }))
 
-// Row 4: 穿透入口卡片
-const drillEntryCards = [
-  { id: 'investment', name: '投资穿透', desc: '预算执行·进度监控', icon: '📈', active: true, risk: 'critical' },
-  { id: 'funds', name: '资金穿透', desc: '资金流向·账户穿透', icon: '💰', active: true, risk: 'high' },
-  { id: 'procurement', name: '采购穿透', desc: '围标识别·AI研判', icon: '📦', active: true, risk: 'critical' },
-  { id: 'contract', name: '合同穿透', desc: 'NLP解析·履约监控', icon: '📋', active: true, risk: 'high' },
-  { id: 'property', name: '产权穿透', desc: '实控人·多层嵌套', icon: '🏛️', active: true, risk: 'high' },
-  { id: 'finance', name: '财务穿透', desc: '费用异常·科目预警', icon: '📊', active: true, risk: 'high' },
-  { id: 'salary', name: '薪酬穿透', desc: '隐性薪酬·合规核查', icon: '💳', active: true, risk: 'medium' },
-  { id: 'overseas', name: '境外穿透', desc: '跨境资金·区域风险', icon: '🌍', active: true, risk: 'medium' },
-  { id: 'banking', name: '金融穿透', desc: '信用风险·敞口监控', icon: '🏦', active: true, risk: 'medium' },
-  { id: 'accounting', name: '会计穿透', desc: '会计质量·准则合规', icon: '🧾', active: true, risk: 'medium' },
-]
-
 // ==================== RIGHT COLUMN ====================
 
 const dashboardAlertTrend = computed(() => {
@@ -2064,8 +1902,8 @@ async function askCompliance(question) {
   let answer = ''
 
   if (question.includes('CT-2026-0312') || question.includes('合同')) {
-    thinking.push('命中规则 R-0017（质保金）、R-0042（无限责任）、R-0089（背靠背支付）')
-    answer = `【合规审查结论】\n\n合同 CT-2026-0312 存在 3 项合规风险：\n\n① 条款第五条 - 无限连带赔偿责任（违反规则 R-0042）\n   《资金管理规定》第28条：合同违约责任应设定金额上限，一般不超过合同总额 20%。\n   当前约定：甲方承担无限连带赔偿责任，无金额上限约束。\n\n② 条款第七条 - 背靠背支付条款（违反规则 R-0089）\n   《关联交易管理办法》第15条：不得将上游回款风险转嫁给下游供应商。\n   当前约定：丙方收款依赖上游回款，存在连环违约风险。\n\n③ 条款第三条 - 缺失质保金条款（违反规则 R-0017）\n   《合同管理办法》第12条：大型设备采购应预留 5-10% 质保金。\n   当前约定：未设置质保金扣留机制。\n\n整体合规评级：不合规（3/8 项违规）\n\n建议：立即启动法务复核，修改上述条款后重新审批。`
+    thinking.push('命中规则 R-0003（预付比例异常）、R-0017（质保金缺失）、R-0055（违约金上限）')
+    answer = `【合规审查结论】\n\n合同 CT-2026-0312 存在 2 项重大合规风险：\n\n① 条款第二条 - 预付 100%，无分期保障（违反规则 R-0003）\n   《资金管理规定》第28条：大型设备采购预付款不得超过合同总额 30%。\n   当前约定：签约后 10 个工作日支付 100%（2.3 亿元），甲方丧失全部资金杠杆。\n\n② 条款第三条 - 缺失质保金条款（违反规则 R-0017）\n   《合同管理办法》第12条：大型设备采购应预留 5-10% 质保金。\n   当前约定：未设置质保金扣留机制，乙方在质保期内缺乏履约约束。\n\n附加风险：违约金上限未明确（条款第五条），逾期交付罚则无上限约束。\n\n整体合规评级：重大违规（2/8 项重大违规 + 1 项附加风险）\n\n建议：紧急冻结合同执行，修改付款方式为分阶段支付，补充质保金条款。`
   } else if (question.includes('9200万') || question.includes('支付')) {
     thinking.push('命中规则 R-0056（大额支付合同关联）、R-0072（关联方交易识别）')
     answer = `【合规审查结论】\n\n华东电力有限公司对「某设备贸易商行」9200 万元支付存在 2 项合规违规：\n\n① 大额支付未关联合同（违反规则 R-0056）\n   《资金管理规定》第35条：单笔 ≥5000 万元支付须关联有效合同编号。\n   当前状态：该笔支付无任何合同引用，无法核实交易真实性。\n\n② 疑似关联方交易（违反规则 R-0072）\n   《关联交易管理办法》第8条：与关联方交易须事前审批并充分披露。\n   当前状态：收款方与华东电力前采购副经理存在关联，未履行审批程序。\n\n整体合规评级：严重违规\n\n建议：立即冻结该笔支付，启动关联交易专项核查，追究相关人员责任。`
@@ -2240,32 +2078,6 @@ const decisions = [
   { title: '冻结华东电力异常支付', desc: '对某设备贸易商行 ¥9200万支付无合同关联，需CFO审批', level: 'high', dept: '司库中心' },
   { title: '启动管理费用专项审计', desc: '装备制造板块管理费用同比+34%，业务招待费+咨询费超预算48%', level: 'high', dept: '审计部' },
   { title: '加强工程建设板块采购前置审查', desc: '近30天3个标段触发围标预警，建议实施准入熔断', level: 'medium', dept: '采购部' },
-]
-
-// ==================== 价值对比 ====================
-const comparisons = [
-  { label: '预警发现时间', old: '平均 14 天', new: '实时 ＜1秒', saving: '提速 99%+' },
-  { label: '全级次穿透', old: '手工逐层查询', new: '一键五级下钻', saving: '从数天到秒级' },
-  { label: '围标识别准确率', old: '人工抽查 ＜30%', new: 'AI 模型 94%', saving: '提升 64pp' },
-  { label: '合同风险审核', old: '人工逐条阅读', new: 'NLP 秒级全量', saving: '效率 ↑1000x' },
-  { label: '资金异常发现率', old: '事后审计 ＜15%', new: '事前拦截 92%', saving: '提升 77pp' },
-  { label: '关联交易追溯', old: '无法关联', new: '图谱一键追溯', saving: '从不可能到可能' },
-  { label: '每月闭环风险', old: '平均 16 条', new: '128 条', saving: '提升 8x' },
-  { label: '合规成本', old: '高（全集团）', new: '下降 60%+', saving: '大幅降低' },
-]
-
-// ==================== Panel 7: 快速穿透入口 ====================
-const quickEntries = [
-  { id: 'investment', name: '投资穿透', no: '①', active: true },
-  { id: 'funds', name: '资金穿透', no: '②', active: true },
-  { id: 'procurement', name: '采购穿透', no: '③', active: true },
-  { id: 'contract', name: '合同穿透', no: '④', active: true },
-  { id: 'property', name: '产权穿透', no: '⑤', active: true },
-  { id: 'finance', name: '财务穿透', no: '⑥', active: true },
-  { id: 'salary', name: '薪酬穿透', no: '⑦', active: true },
-  { id: 'overseas', name: '境外穿透', no: '⑧', active: true },
-  { id: 'banking', name: '金融穿透', no: '⑨', active: true },
-  { id: 'accounting', name: '会计穿透', no: '⑩', active: true },
 ]
 
 // ==================== 穿透面板 ====================
@@ -3304,11 +3116,9 @@ onUnmounted(() => {
 .dbrd {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 56px);
-  min-height: calc(100vh - 56px);
+  height: 100%;
   background: linear-gradient(180deg, #040d1a 0%, #0a1929 100%);
-  overflow-x: hidden;
-  overflow-y: hidden;
+  overflow: hidden;
   position: relative;
 }
 
@@ -3332,13 +3142,12 @@ onUnmounted(() => {
 .dbrd-body {
   flex: 1;
   display: flex;
-  gap: 8px;
-  padding: 8px;
+  gap: 6px;
+  padding: 6px;
   min-height: 0;
-  height: 100%;
-  overflow: visible;
+  overflow: hidden;
 }
-.col { display: flex; flex-direction: column; gap: 8px; min-height: 0; min-width: 0; }
+.col { display: flex; flex-direction: column; gap: 6px; min-height: 0; min-width: 0; overflow: hidden; }
 .col-left { flex: 0 0 25%; width: 25%; }
 .col-center { flex: 0 0 50%; width: 50%; }
 .col-right { flex: 0 0 25%; width: 25%; }
@@ -3349,7 +3158,7 @@ onUnmounted(() => {
   backdrop-filter: blur(4px);
   border: 1px solid rgba(0, 229, 255, 0.12);
   border-radius: 8px;
-  padding: 10px;
+  padding: 8px;
   min-height: 0;
   overflow: hidden;
   position: relative;
@@ -3364,15 +3173,15 @@ onUnmounted(() => {
 .panel-lg::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; border-radius: 0 0 8px 0; }
 
 .p-title {
-  font-size: 12px; font-weight: 600; color: #e8f1ff;
-  margin: 0 0 6px; display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; color: #e8f1ff;
+  margin: 0 0 4px; display: flex; align-items: center; gap: 5px;
   letter-spacing: 0.02em;
 }
-.p-title::before { content: ''; width: 3px; height: 12px; border-radius: 2px; background: linear-gradient(180deg, #3b82f6, #06b6d4); }
+.p-title::before { content: ''; width: 3px; height: 10px; border-radius: 2px; background: linear-gradient(180deg, #3b82f6, #06b6d4); }
 
-.p-chart { flex: 1; min-height: 120px; }
-.heat-chart { flex: 1; min-height: 180px; }
-.half { flex: 1; min-height: 120px; }
+.p-chart { flex: 1; min-height: 0; }
+.heat-chart { flex: 1; min-height: 0; }
+.half { flex: 1; min-height: 0; }
 
 /* Panel heights */
 .col-left .panel-lg:nth-child(1) { flex: 1; }
@@ -3443,7 +3252,7 @@ onUnmounted(() => {
 .contract-perf-list { display: flex; flex-direction: column; gap: 6px; }
 .cp-item { display: flex; flex-direction: column; gap: 3px; }
 .cp-header { display: flex; align-items: center; justify-content: space-between; }
-.cp-name { font-size: 11px; color: #c0d0e0; }
+.cp-name { font-size: 11px; color: #c0d0e0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 120px; }
 .cp-bar-wrap { display: flex; align-items: center; gap: 6px; }
 .cp-bar { flex: 1; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
 .cp-fill { height: 100%; border-radius: 3px; transition: width 0.4s; }
@@ -3482,7 +3291,7 @@ onUnmounted(() => {
 .row-risk td { background: rgba(239,68,68,0.1) !important; color: #fca5a5; }
 
 /* ==================== MODULE BOARDS (2x2) ==================== */
-.module-boards { flex: 2; min-height: 280px; overflow: auto; padding: 10px 10px 6px; background: rgba(10, 40, 70, 0.55); border: 1px solid rgba(0, 229, 255, 0.12); border-radius: 8px; display: flex; flex-direction: column; }
+.module-boards { flex: 2; min-height: 0; overflow: auto; padding: 8px 8px 4px; background: rgba(10, 40, 70, 0.55); border: 1px solid rgba(0, 229, 255, 0.12); border-radius: 8px; display: flex; flex-direction: column; }
 .board-grid { flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 6px; min-height: 240px; }
 .board-card {
   background: rgba(8, 30, 55, 0.6); border: 1px solid rgba(0, 229, 255, 0.1);
@@ -3628,7 +3437,7 @@ onUnmounted(() => {
 }
 
 .cockpit-compact .cp-name {
-  font-size: 10px;
+  font-size: 10px; max-width: 90px;
 }
 
 .cockpit-compact .cp-bar {
@@ -4195,10 +4004,11 @@ onUnmounted(() => {
 
 /* ==================== CONTRACT CENTER ==================== */
 .contract-center-screen {
-  min-height: calc(100vh - 120px);
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  overflow-y: auto;
   color: #e6f7ff;
   font-family: "Source Han Sans SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
   overflow: visible;

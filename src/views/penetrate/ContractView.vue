@@ -354,7 +354,7 @@ const contractStats = computed(() => ({
 const contractKpis = computed(() => [
   { label: '存量合同', value: CONTRACTS.length, unit: '份', sub: '演示子集', warn: false },
   { label: '合同总额', value: contractStats.value.totalAmount, unit: '亿', sub: '', warn: false },
-  { label: '高风险合同', value: contractStats.value.highRisk, unit: '份', sub: 'NLP 标红', warn: true },
+  { label: '高风险合同', value: contractStats.value.highRisk, unit: '份', sub: 'AI 标红', warn: true },
   { label: '本月到期', value: 3, unit: '份', sub: '', warn: false },
   { label: '履约异常', value: 1, unit: '份', sub: '含超付预警', warn: true },
   { label: '平均审批周期', value: 12, unit: '天', sub: '', warn: false },
@@ -486,7 +486,7 @@ watch(
 </script>
 
 <style scoped>
-.view { max-width: 1600px; }
+.view { max-width: 1600px; height: 100%; overflow-y: auto; }
 .block { padding: 16px 20px; }
 .desc { color: var(--text-muted); font-size: 13px; margin: 0 0 16px; }
 

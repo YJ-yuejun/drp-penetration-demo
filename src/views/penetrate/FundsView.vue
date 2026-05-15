@@ -973,12 +973,13 @@ function formatYi(value) {
 
 <style scoped>
 .funds-screen {
-  min-height: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-bottom: 24px;
+  gap: 8px;
+  padding: 8px 14px 6px;
   color: #dff6ff;
+  overflow: hidden;
 }
 
 .glass-panel {
@@ -1005,29 +1006,31 @@ function formatYi(value) {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
-  padding: 24px 28px;
+  gap: 14px;
+  padding: 10px 18px;
+  flex-shrink: 0;
 }
 
 .screen-kicker {
-  font-size: 12px;
-  letter-spacing: 0.24em;
+  font-size: 10px;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: #7dd3fc;
 }
 
 .screen-title {
-  margin: 8px 0;
-  font-size: 32px;
+  margin: 2px 0;
+  font-size: 18px;
   color: #f5fbff;
-  text-shadow: 0 0 18px rgba(14, 165, 233, 0.28);
+  text-shadow: 0 0 12px rgba(14, 165, 233, 0.28);
 }
 
 .screen-desc {
   max-width: 820px;
   margin: 0;
+  font-size: 11px;
   color: #9ec9ea;
-  line-height: 1.7;
+  line-height: 1.4;
 }
 
 .topbar-meta {
@@ -1063,12 +1066,12 @@ function formatYi(value) {
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 14px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .kpi-card {
-  padding: 16px 18px;
-  min-height: 150px;
+  padding: 8px 12px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -1159,13 +1162,22 @@ function formatYi(value) {
 .visual-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .chart-panel,
-.table-panel,
 .bottom-panel {
-  padding: 18px 20px;
+  padding: 10px 16px;
+}
+
+.table-panel {
+  padding: 10px 14px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .panel-title {
@@ -1233,8 +1245,8 @@ function formatYi(value) {
 }
 
 .visual-chart {
-  height: 360px;
-  margin-top: 14px;
+  height: 200px;
+  margin-top: 6px;
 }
 
 .table-head {
@@ -1265,7 +1277,9 @@ function formatYi(value) {
 }
 
 .table-shell {
-  overflow-x: auto;
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
 }
 
 .payment-table {

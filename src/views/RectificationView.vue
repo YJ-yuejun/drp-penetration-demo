@@ -1,5 +1,5 @@
 <template>
-  <div class="panel block">
+  <div class="panel block full-page">
     <h2 class="panel-title">风险整改与销号（流程模拟）</h2>
     <p class="desc">点击下方按钮推进状态，用于现场演示「识别 → 预警 → 工单 → 整改 → 销号」闭环。</p>
 

@@ -4,8 +4,8 @@
       <div class="topbar-left">
         <div class="logo">DRP</div>
         <div class="brand-text">
-          <span class="brand-title">穿透式监管</span>
-          <span class="brand-sub">· 演示原型</span>
+          <span class="brand-title">全域数字化资源管理平台</span>
+          <span class="brand-sub">· Digital Resource Platform</span>
         </div>
       </div>
       <div class="topbar-center">
@@ -49,7 +49,7 @@ onUnmounted(() => {
 .layout-root {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100%;
   background: radial-gradient(ellipse 120% 80% at 50% -20%, rgba(59, 130, 246, 0.18), transparent 50%),
     var(--bg-deep);
 }
@@ -74,30 +74,34 @@ onUnmounted(() => {
 }
 
 .logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent), #06b6d4);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0ea5e9, #3b82f6, #8b5cf6);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 11px;
+  font-weight: 900;
+  font-size: 13px;
   color: #fff;
-  box-shadow: var(--glow);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
   flex-shrink: 0;
+  font-family: 'Georgia', 'Times New Roman', 'STSong', 'SimSun', serif;
+  letter-spacing: -0.5px;
 }
 
 .brand-text {
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 6px;
 }
 
 .brand-title {
-  font-weight: 700;
+  font-weight: 600;
   font-size: 15px;
   color: var(--text);
+  font-family: 'STSong', 'Songti SC', 'Noto Serif SC', 'SimSun', 'KaiTi', serif;
+  letter-spacing: 0.04em;
 }
 
 .brand-sub {
@@ -135,5 +139,6 @@ onUnmounted(() => {
   min-height: 0;
   width: 100%;
   padding: 0;
+  overflow: hidden;
 }
 </style>

@@ -411,7 +411,7 @@ async function generateReport() {
     '## 二、风险域分析',
     '采购域新增预警 12 条（占比 22%），其中围标串标类 6 条，同比暴增 300%。资金域新增 9 条（16%），以异常支付为主。投资域新增 8 条（14%），集中在境外项目超预算。',
     '## 三、重点关注清单',
-    '1. 围标串标：CG-2026-0501（AI 围标概率 0.94）— 建议暂停开标\n2. 大额支付：华东电力 9200 万元无合同支付 — 已触发拦截\n3. 投资超预算：东南亚某国路桥 PPP 超预算 18.6% — 核查中\n4. 高风险合同：CT-2026-0312 无限责任+背靠背支付 — 启动法务复核',
+    '1. 围标串标：CG-2026-0501（AI 围标概率 0.94）— 建议暂停开标\n2. 大额支付：华东电力 9200 万元无合同支付 — 已触发拦截\n3. 投资超预算：东南亚某国路桥 PPP 超预算 18.6% — 核查中\n4. 重大风险合同：CT-2026-0312 预付100%+无质保金 — 紧急冻结履约',
     '## 四、建议处置',
     '① 优先完成工单 WO-2026-0042/0037 核查闭环\n② 对工程建设板块采购实施前置交叉比对\n③ 将海外工程总承包公司风险等级从橙色调升至红色\n④ 对某设备贸易商行启动关联交易专项审计',
   ]
@@ -507,14 +507,14 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.smart-platform { max-width: 1400px; }
+.smart-platform { max-width: 1400px; height: 100%; overflow: hidden; display: flex; flex-direction: column; padding: 0 16px; }
 
 /* Tab Bar */
 .tab-bar {
   display: flex;
   gap: 4px;
   padding: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   border-radius: 12px;
 }
 .tab-btn {
@@ -537,15 +537,15 @@ onMounted(() => {
 .tab-icon { font-size: 16px; }
 
 /* Common */
-.tab-content { min-height: 0; }
+.tab-content { min-height: 0; flex: 1; overflow-y: auto; }
 .block { padding: 16px 20px; }
 .desc { color: var(--text-muted); font-size: 13px; margin-bottom: 14px; }
 
 /* Chat */
 .chat-area {
-  max-height: 480px;
+  max-height: 380px;
   overflow-y: auto;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   padding: 8px 0;
 }
 .chat-msg { margin-bottom: 14px; }

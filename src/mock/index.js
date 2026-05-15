@@ -34,7 +34,7 @@ export const RISK_SAMPLES = [
   { id: 'R02', type: '大额异常支付', level: 'high', sector: '电力能源', company: '华东电力有限公司', summary: '对非主营供应商单笔支付 9200 万元，未关联合同编号', scene: 'funds' },
   { id: 'R03', type: '管理费用激增', level: 'medium', sector: '装备制造', company: '重型装备集团', summary: '管理费用同比 +34%，偏离板块均值', scene: 'finance' },
   { id: 'R04', type: '股权多层嵌套', level: 'high', sector: '金融服务', company: '集团财务公司', summary: 'SPV 层级 ≥5 层，实际控制人穿透待核查', scene: 'property' },
-  { id: 'R05', type: '高风险合同', level: 'high', sector: '工程建设', company: '城市基建投资公司', summary: '无限责任条款 + 背靠背支付，NLP 标红', scene: 'contract' },
+  { id: 'R05', type: '重大风险合同', level: 'critical', sector: '工程建设', company: '城市基建投资公司', summary: '预付100% + 无质保金，AI 标红', scene: 'contract' },
   { id: 'R06', type: '围标串标', level: 'critical', sector: '工程建设', company: '海外工程总承包公司', summary: '三家投标单位 MAC 地址相同，报价呈阶梯分布', scene: 'procurement' },
   { id: 'R07', type: '隐性薪酬', level: 'medium', sector: '科创与其他', company: '数字科技公司', summary: '费用科目向自然人频繁支付，疑似变相薪酬', scene: 'salary' },
   { id: 'R08', type: '境外资金延迟', level: 'medium', sector: '工程建设', company: '海外工程总承包公司', summary: '境外账户回款延迟 >45 天', scene: 'overseas' },

@@ -1,5 +1,5 @@
 <template>
-  <div class="panel block">
+  <div class="panel block full-page">
     <h2 class="panel-title">核查工单管理</h2>
     <p class="desc">支持通过 `riskId / workOrderId` 定位关联工单，便于从驾驶舱或风险中心一键衔接闭环处置。</p>
     <div class="layout">

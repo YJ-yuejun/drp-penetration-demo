@@ -152,7 +152,7 @@ function pickCompany(c) { companyId.value = c.id; step.value = 3 }
 </script>
 
 <style scoped>
-.view { max-width: 1600px; }
+.view { max-width: 1600px; height: 100%; overflow-y: auto; }
 .block { padding: 16px 20px; }
 .desc { color: var(--text-muted); font-size: 13px; margin: 0 0 16px; }
 .kpi-row { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }

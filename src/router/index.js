@@ -32,8 +32,8 @@ const router = createRouter({
 })
 
 router.afterEach((to) => {
-  const base = 'DRP 穿透式监管演示'
-  document.title = to.meta?.title ? `${to.meta.title} · ${base}` : base
+  const base = 'DRP · 全域数字化资源管理平台'
+  document.title = to.meta?.title ? `${to.meta.title} · DRP` : base
 })
 
 export default router

@@ -176,7 +176,7 @@ function pickCompany(c) { companyId.value = c.id; step.value = 2 }
 </script>
 
 <style scoped>
-.view { max-width: 1600px; }
+.view { max-width: 1600px; height: 100%; overflow-y: auto; }
 .block { padding: 16px 20px; }
 .desc { color: var(--text-muted); font-size: 13px; margin: 0 0 16px; }
 .row { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; align-items: start; }

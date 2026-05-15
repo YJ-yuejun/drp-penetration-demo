@@ -1,5 +1,5 @@
 <template>
-  <div class="panel block">
+  <div class="panel block full-page">
     <h2 class="panel-title">风险预警中心</h2>
     <p class="desc">风险条目统一落到风险中心处理；支持定位关联工单，再一键回到对应穿透页面继续演示。</p>
     <div class="row">
